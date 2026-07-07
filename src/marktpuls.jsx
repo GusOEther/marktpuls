@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import { useState, useMemo } from "react";
 import {
   AreaChart, Area, XAxis, YAxis, ReferenceLine, ReferenceArea,
   ResponsiveContainer, Tooltip,
@@ -426,9 +426,9 @@ function Gauge({ score, delta }) {
 }
 
 // ---------- Bausteine ----------
-function Card({ title, children, right }) {
+function Card({ title, children, right, style }) {
   return (
-    <section style={{ background: C.card, border: `1px solid ${C.line}`, borderRadius: 18, padding: 16 }}>
+    <section style={{ background: C.card, border: `1px solid ${C.line}`, borderRadius: 18, padding: 16, ...style }}>
       {title && (
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 12 }}>
           <h2 style={{ fontSize: 11, letterSpacing: "0.14em", textTransform: "uppercase", color: C.mut, fontWeight: 700 }}>
@@ -501,9 +501,19 @@ export default function Marktpuls() {
         input[type=range]::-moz-range-thumb { width: 16px; height: 16px; border-radius: 99px;
           background: ${C.text}; border: 3px solid ${C.page}; cursor: pointer; }
         @media (prefers-reduced-motion: reduce) { .needle, .bar-fill { transition: none; } }
+        .wrap { max-width: 440px; margin: 0 auto; padding: 20px 14px 32px;
+          display: flex; flex-direction: column; gap: 12px; }
+        .col { display: contents; }
+        @media (min-width: 900px) {
+          .wrap { max-width: 968px; padding: 28px 24px 40px;
+            display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start; }
+          .wrap > header, .wrap > footer { grid-column: 1 / -1; }
+          .col { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+          .pills { max-width: 480px; }
+        }
       `}</style>
 
-      <div style={{ maxWidth: 440, margin: "0 auto", padding: "20px 14px 32px", display: "flex", flexDirection: "column", gap: 12 }}>
+      <div className="wrap">
 
         {/* Header */}
         <header style={{ padding: "4px 4px 2px" }}>
@@ -521,7 +531,7 @@ export default function Marktpuls() {
           </div>
 
           {/* Szenario-Pills */}
-          <div style={{ display: "flex", gap: 6, marginTop: 14 }}>
+          <div className="pills" style={{ display: "flex", gap: 6, marginTop: 14 }}>
             {Object.entries(SCN).map(([key, s]) => (
               <button key={key}
                 onClick={() => { setScenario(key); setOffset(0); setOpen(null); }}
@@ -538,49 +548,19 @@ export default function Marktpuls() {
           </div>
         </header>
 
+        {/* Spalte 1 (Desktop) — order steuert die mobile Reihenfolge */}
+        <div className="col">
+
         {/* Gauge */}
-        <Card>
+        <Card style={{ order: 1 }}>
           <Gauge score={score} delta={delta} />
           <p style={{ color: C.mut, fontSize: 11.5, textAlign: "center", marginTop: 12, lineHeight: 1.5 }}>
             Composite aus 7 gewichteten Markt-Internals · 0 = Risk-Off · 100 = Risk-On
           </p>
         </Card>
 
-        {/* Frühwarnsignale */}
-        <Card title="Frühwarnsignale" right={
-          <span className="mono" style={{
-            fontSize: 11, color: alerts.length ? C.amber : C.green,
-          }}>{alerts.length ? `${alerts.length} aktiv` : "alles ruhig"}</span>
-        }>
-          <ul style={{ display: "flex", flexDirection: "column", gap: 4, margin: 0, padding: 0, listStyle: "none" }}>
-            {signals.map((s) => (
-              <li key={s.id}>
-                <button onClick={() => setOpen(open === s.id ? null : s.id)}
-                  style={{
-                    width: "100%", textAlign: "left", display: "flex", gap: 10, alignItems: "flex-start",
-                    background: s.lvl !== "ok" ? C.card2 : "transparent",
-                    border: "none", borderRadius: 10, padding: "8px 10px", cursor: "pointer",
-                    color: C.text, fontFamily: "inherit",
-                  }}>
-                  <Dot lvl={s.lvl} />
-                  <span style={{ flex: 1 }}>
-                    <span style={{ fontSize: 13.5, fontWeight: 600, opacity: s.lvl === "ok" ? 0.65 : 1 }}>
-                      {s.label}
-                    </span>
-                    {(open === s.id || s.lvl !== "ok") && (
-                      <span style={{ display: "block", color: C.mut, fontSize: 12, lineHeight: 1.5, marginTop: 2 }}>
-                        {s.detail}
-                      </span>
-                    )}
-                  </span>
-                </button>
-              </li>
-            ))}
-          </ul>
-        </Card>
-
         {/* Verlauf + Zeitreise */}
-        <Card title="Sentiment · 90 Tage" right={
+        <Card style={{ order: 3 }} title="Sentiment · 90 Tage" right={
           <span className="mono" style={{ fontSize: 11, color: C.mut }}>{Math.round(score)} Pkt.</span>
         }>
           <div style={{ height: 150, marginLeft: -8 }}>
@@ -624,7 +604,7 @@ export default function Marktpuls() {
         </Card>
 
         {/* Komponenten */}
-        <Card title="Komponenten des Scores">
+        <Card style={{ order: 4 }} title="Komponenten des Scores">
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
             {COMPONENTS.map((c) => {
               const v = D.comp[c.key][t];
@@ -666,8 +646,46 @@ export default function Marktpuls() {
           </p>
         </Card>
 
+        </div>
+
+        {/* Spalte 2 (Desktop) */}
+        <div className="col">
+
+        {/* Frühwarnsignale */}
+        <Card style={{ order: 2 }} title="Frühwarnsignale" right={
+          <span className="mono" style={{
+            fontSize: 11, color: alerts.length ? C.amber : C.green,
+          }}>{alerts.length ? `${alerts.length} aktiv` : "alles ruhig"}</span>
+        }>
+          <ul style={{ display: "flex", flexDirection: "column", gap: 4, margin: 0, padding: 0, listStyle: "none" }}>
+            {signals.map((s) => (
+              <li key={s.id}>
+                <button onClick={() => setOpen(open === s.id ? null : s.id)}
+                  style={{
+                    width: "100%", textAlign: "left", display: "flex", gap: 10, alignItems: "flex-start",
+                    background: s.lvl !== "ok" ? C.card2 : "transparent",
+                    border: "none", borderRadius: 10, padding: "8px 10px", cursor: "pointer",
+                    color: C.text, fontFamily: "inherit",
+                  }}>
+                  <Dot lvl={s.lvl} />
+                  <span style={{ flex: 1 }}>
+                    <span style={{ fontSize: 13.5, fontWeight: 600, opacity: s.lvl === "ok" ? 0.65 : 1 }}>
+                      {s.label}
+                    </span>
+                    {(open === s.id || s.lvl !== "ok") && (
+                      <span style={{ display: "block", color: C.mut, fontSize: 12, lineHeight: 1.5, marginTop: 2 }}>
+                        {s.detail}
+                      </span>
+                    )}
+                  </span>
+                </button>
+              </li>
+            ))}
+          </ul>
+        </Card>
+
         {/* MA-Monitor */}
-        <Card title="Gleitende Durchschnitte · Leitindex">
+        <Card style={{ order: 5 }} title="Gleitende Durchschnitte · Leitindex">
           <div style={{ display: "flex", justifyContent: "space-between", gap: 8 }}>
             {[
               ["Kurs", D.price[t].toFixed(1)],
@@ -696,7 +714,7 @@ export default function Marktpuls() {
         </Card>
 
         {/* Makro-Signale */}
-        <Card title="Makro-Signale · Wochenlogik" right={
+        <Card style={{ order: 6 }} title="Makro-Signale · Wochenlogik" right={
           <span className="mono" style={{
             fontSize: 11, fontWeight: 600,
             color: macro.buys >= macro.sells ? C.green : C.red,
@@ -743,8 +761,10 @@ export default function Marktpuls() {
           </p>
         </Card>
 
+        </div>
+
         {/* Footer */}
-        <footer style={{ textAlign: "center", color: C.mut, fontSize: 10.5, lineHeight: 1.7, padding: "6px 16px 0" }}>
+        <footer style={{ textAlign: "center", color: C.mut, fontSize: 10.5, lineHeight: 1.7, padding: "6px 16px 0", order: 7 }}>
           Prototyp mit simulierten Demo-Daten (3 Marktregime).<br />
           Keine Anlageberatung — Informations- und Lernzwecke.
         </footer>
