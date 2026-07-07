@@ -31,5 +31,10 @@ vercel --prod     # Produktion
 
 ## Roadmap
 
-- [x] **Stufe 1:** PWA-Manifest + App-Icon, Vercel-Deployment vorbereitet
-- [ ] Weitere Stufen folgen
+Die vollständige Produkt-Roadmap steht in [docs/ROADMAP.md](docs/ROADMAP.md):
+
+- [x] **Stufe 1:** PWA-Manifest + App-Icon, Vercel-Deployment vorbereitet, responsives Desktop-Layout
+- [ ] **Stufe 2:** Echte Datenfeeds (EOD) — siehe [Machbarkeitsstudie](docs/machbarkeitsstudie-datenfeeds.md)
+- [ ] **Stufe 3:** Vertrauen & Betrieb (Offline-PWA, Tests, Monitoring, Rechtliches)
+- [ ] **Stufe 4:** Produkt-Features (Signal-Journal, Push-Benachrichtigungen, Historie)
+- [ ] **Stufe 5:** Reichweite & optionale Monetarisierung
