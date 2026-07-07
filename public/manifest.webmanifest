@@ -1,0 +1,31 @@
+{
+  "name": "MarktPuls – Sentiment & Frühwarnsystem",
+  "short_name": "MarktPuls",
+  "description": "Composite-Score aus gewichteten Markt-Internals mit regelbasierten Frühwarnsignalen und Zeitreise-Scrubber.",
+  "lang": "de",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#07090F",
+  "theme_color": "#07090F",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

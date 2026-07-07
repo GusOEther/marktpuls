@@ -1,16 +1,35 @@
-# React + Vite
+# MarktPuls
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Sentiment- & Frühwarnsystem-Dashboard (Prototyp, Demo-Daten): Composite-Score aus
+sieben gewichteten Markt-Internals, regelbasierte Frühwarnsignale und ein
+Zeitreise-Scrubber zum Durchspielen historischer Marktphasen.
 
-Currently, two official plugins are available:
+Gebaut mit **React 19**, **Vite** und **Recharts**. Installierbar als PWA
+(Manifest + App-Icons vorhanden).
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Entwicklung
 
-## React Compiler
+```bash
+npm install
+npm run dev       # Dev-Server mit HMR
+npm run build     # Produktions-Build nach dist/
+npm run preview   # Produktions-Build lokal testen
+npm run lint      # ESLint
+```
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Deployment (Vercel)
 
-## Expanding the ESLint configuration
+Das Projekt ist für Vercel vorbereitet ([vercel.json](vercel.json) mit
+SPA-Rewrite). Deployment per Vercel-Dashboard („Import Git Repository" →
+dieses Repo, Framework-Preset **Vite**) oder per CLI:
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```bash
+npm i -g vercel
+vercel            # Preview-Deployment
+vercel --prod     # Produktion
+```
+
+## Roadmap
+
+- [x] **Stufe 1:** PWA-Manifest + App-Icon, Vercel-Deployment vorbereitet
+- [ ] Weitere Stufen folgen
